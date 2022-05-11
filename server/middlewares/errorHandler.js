@@ -14,6 +14,30 @@ function errorHandler (err, req, res, next) {
       code = 400;
       messages = "Invalid email or password";
       break;
+    case 'MessageBadRequest':
+      code = 400;
+      messages = "Message cannot be empty";
+      break;
+    case 'TagBadReqest':
+      code = 400;
+      messages = "Tag is required";
+      break;
+    case 'MissingAccessToken':
+      code = 401;
+      messages = "Missing Access Token";
+      break;
+    case 'InvalidToken':
+      code = 401;
+      messages = "Invalid Access Token";
+      break;
+    case 'Forbidden':
+      code = 403;
+      messages = "Forbidden";
+      break;
+    case 'CommentNotFound':
+      code = 404;
+      messages = "Comment not found";
+      break;
     case 'EmailIsUsed':
       code = 409;
       messages = "Email has been used by other user";
