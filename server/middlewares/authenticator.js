@@ -13,7 +13,8 @@ async function authenticator (req, res, next) {
     if (checkUser === 0) throw ({ name: 'InvalidToken' })
 
     req.user = { 
-      id: checkUser[0]._id, 
+      id: checkUser[0]._id,
+      username: checkUser[0].username,
       email: checkUser[0].email, 
       role: checkUser[0].role 
     };

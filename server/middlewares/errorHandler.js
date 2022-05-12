@@ -18,7 +18,7 @@ function errorHandler (err, req, res, next) {
       code = 400;
       messages = "Message cannot be empty";
       break;
-    case 'TagBadReqest':
+    case 'TagBadRequest':
       code = 400;
       messages = "Tag is required";
       break;

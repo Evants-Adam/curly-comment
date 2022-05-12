@@ -27,7 +27,6 @@ class CommentController {
   static async createComment (req, res, next) {
     try {
       const { message, tag } = req.body;
-
       // Start of Inputs validation
       if (!message) throw ({ name: "MessageBadRequest" });
       if (!tag) throw ({ name: "TagBadRequest"});

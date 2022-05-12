@@ -3,12 +3,28 @@ const { getDb } =  require('../config/mongodb');
 const collectionName = 'comments';
 
 class Comment {
-  static getAllComments () {
-    return getDb().collection(`${collectionName}`).find().toArray();
+  static async getAllComments () {
+    const allComments = await getDb().collection(`${collectionName}`).find().toArray();
+    
+    const newAllComments = await Promise.all(allComments.map(async (el) => {
+      const user = await getDb().collection(`users`).find({ "_id": ObjectId(el.UserId) }, { projection: { "_id": 0, password: 0 } }).toArray();
+      
+      return { ...el, User: { ...user[0] } };
+    }));
+
+    return newAllComments;
   };
 
-  static findOneComment (data) {
-    return getDb().collection(`${collectionName}`).find({ "_id": ObjectId(data) }).toArray();
+  static async findOneComment (data) {
+    const comment = await getDb().collection(`${collectionName}`).find({ "_id": ObjectId(data) }).toArray();
+
+    const newComment = await Promise.all(comment.map(async (el) => {
+      const user = await getDb().collection(`users`).find({ "_id": ObjectId(el.UserId) },{ projection: { "_id": 0, password: 0 } }).toArray();
+      
+      return { ...el, User: { ...user[0] } };
+    }));
+
+    return newComment;
   };
 
   static createComment (data) {

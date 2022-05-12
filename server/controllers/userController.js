@@ -3,6 +3,14 @@ const { comparePassword } = require('../helpers/hash');
 const { signToken } = require('../helpers/jwt');
 
 class UserController {
+  static async getProfile (req, res, next) {
+    try {
+      res.status(200).json(req.user)
+    } catch (error) {
+      next(error)
+    }
+  };
+
   static async createUser (req, res, next) {
     try {
       const { username, email, password } = req.body;

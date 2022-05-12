@@ -16,12 +16,12 @@ class User {
 
   static checkEmail (email) {
     let emailCheck = email.toLowerCase();
-    return getDb().collection(`${collectionName}`).find({ email: { $regex : emailCheck, $options : 'i' } }, { password: 0 }).toArray();
+    return getDb().collection(`${collectionName}`).find({ email: { $regex : emailCheck, $options : 'i' } }, { projection: { "password": 0 } }).toArray();
   };
 
   static checkUsername (username) {
     let usernameCheck = username.toLowerCase();
-    return getDb().collection(`${collectionName}`).find({ username:  { $regex : usernameCheck, $options : 'i' } }, { password: 0 }).toArray();
+    return getDb().collection(`${collectionName}`).find({ username:  { $regex : usernameCheck, $options : 'i' } }, { projection: { "password": 0 } }).toArray();
   };
 
   static findOneUser (email) {
