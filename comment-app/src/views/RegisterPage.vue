@@ -36,23 +36,21 @@ export default {
   methods: {
     newUserRegisterSubmit (newUserCredentials) {
       this.$store.dispatch('registerSubmit', newUserCredentials)
-        .then((data) => {
-          if (data.acknowledged) {
-            Swal.fire(
-              'Success!',
-              'Register success!',
-              'success'
-            )
-            this.$router.push({ path: 'login' })
-          } else {
-            Swal.fire(
-              'Opss...!',
-              data.message,
-              'error'
-            )
-          }
+        .then((response) => {
+          Swal.fire(
+            'Success!',
+            'Register success!',
+            'success'
+          )
+          this.$router.push({ path: 'login' })
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          Swal.fire(
+            'Opss..!',
+            error.response.data.message,
+            'error'
+          )
+        })
     },
     handleSignInClick () {
       this.$router.push({ path: 'login' })

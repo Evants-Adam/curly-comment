@@ -37,24 +37,24 @@ export default {
   methods: {
     signInSubmit (userCredentials) {
       this.$store.dispatch('signInSubmit', userCredentials)
-        .then((data) => {
-          if (data.access_token) {
-            localStorage.setItem('access_token', data.access_token)
+        .then((response) => {
+          if (response.data.access_token) {
+            localStorage.setItem('access_token', response.data.access_token)
             Swal.fire(
               'Success!',
               'Login success!',
               'success'
             )
             this.$router.push({ name: 'CommentPage' })
-          } else {
-            Swal.fire(
-              'Opss..!',
-              data.message,
-              'error'
-            )
           }
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          Swal.fire(
+            'Opss..!',
+            error.response.data.message,
+            'error'
+          )
+        })
     },
     handleSignUpClick () {
       this.$router.push({ path: 'register' })
