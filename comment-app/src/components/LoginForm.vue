@@ -41,6 +41,8 @@ export default {
   methods: {
     signInSubmit () {
       this.$emit('signInSubmit', this.userCredentials)
+      this.userCredentials.email = ''
+      this.userCredentials.password = ''
     },
     handleSignUpClick () {
       this.$emit('signUpClick')

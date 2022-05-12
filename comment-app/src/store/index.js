@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -29,110 +30,92 @@ export default new Vuex.Store({
   },
   actions: {
     async getUserProfile (context) {
-      return fetch(`${this.state.serverUrl}/user`, {
+      return axios({
+        method: 'GET',
+        url: `${this.state.serverUrl}/user`,
         headers: {
           access_token: localStorage.getItem('access_token')
         }
       })
-        .then((response) => response.json())
-        .then((data) => {
-          context.commit('SET_USER_PROFILE', data)
+        .then((response) => {
+          context.commit('SET_USER_PROFILE', response.data)
         })
         .catch((error) => console.log(error))
     },
     async signInSubmit (_, userCredentials) {
-      return fetch(`${this.state.serverUrl}/login`, {
+      return axios({
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userCredentials)
+        url: `${this.state.serverUrl}/login`,
+        data: userCredentials
       })
-        .then((response) => response.json())
-        .then((data) => data)
-        .catch((error) => console.log(error))
     },
     async registerSubmit (_, newUserCredentials) {
-      return fetch(`${this.state.serverUrl}/register`, {
+      return axios({
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newUserCredentials)
+        url: `${this.state.serverUrl}/register`,
+        data: newUserCredentials
       })
-        .then((response) => response.json())
-        .then((data) => data)
-        .catch((error) => console.log(error))
     },
     async postComment (context, data) {
-      return fetch(`${this.state.serverUrl}/comments`, {
+      return axios({
         method: 'POST',
+        url: `${this.state.serverUrl}/comments`,
         headers: {
-          'Content-Type': 'application/json',
           access_token: localStorage.getItem('access_token')
         },
-        body: JSON.stringify(data)
+        data: data
       })
-        .then((response) => response.json())
         .then((data) => {
           context.dispatch('getAllComments')
-          return data
+          return true
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          return error
+        })
     },
     async getAllComments (context) {
-      return fetch(`${this.state.serverUrl}/comments`, {
+      return axios({
+        method: 'GET',
+        url: `${this.state.serverUrl}/comments`,
         headers: {
           access_token: localStorage.getItem('access_token')
         }
       })
-        .then((response) => response.json())
-        .then((data) => {
-          context.commit('SET_COMMENTS', data)
+        .then((response) => {
+          context.commit('SET_COMMENTS', response.data)
         })
     },
     async deleteComment (context, id) {
-      return fetch(`${this.state.serverUrl}/comments/${id.toString()}`, {
+      return axios({
         method: 'DELETE',
+        url: `${this.state.serverUrl}/comments/${id.toString()}`,
         headers: {
-          'Content-Type': 'application/json',
           access_token: localStorage.getItem('access_token')
         }
       })
-        .then((response) => response.json())
-        .then((data) => {
-          context.dispatch('getAllComments')
-          return data
-        })
-        .catch((error) => console.log(error))
     },
     async getOneComment (context, id) {
-      return fetch(`${this.state.serverUrl}/comments/${id.toString()}`, {
+      return axios({
+        method: 'GET',
+        url: `${this.state.serverUrl}/comments/${id.toString()}`,
         headers: {
           access_token: localStorage.getItem('access_token')
         }
       })
-        .then((response) => response.json())
-        .then((data) => {
-          context.commit('SET_COMMENT_TO_EDIT', data)
+        .then((response) => {
+          context.commit('SET_COMMENT_TO_EDIT', response.data)
           return true
         })
-        .catch((error) => console.log(error))
     },
-    async editComment (context, data) {
-      return fetch(`${this.state.serverUrl}/comments/${data.id.toString()}`, {
+    async editComment (_, data) {
+      return axios({
         method: 'PUT',
+        url: `${this.state.serverUrl}/comments/${data.id.toString()}`,
         headers: {
-          'Content-Type': 'application/json',
           access_token: localStorage.getItem('access_token')
         },
-        body: JSON.stringify(data)
+        data: data
       })
-        .then((response) => response.json())
-        .then((data) => {
-          return data
-        })
-        .catch((error) => console.log(error))
     },
     signOutSubmit (context) {
       context.commit('SET_PRELOADER_STATE', true)

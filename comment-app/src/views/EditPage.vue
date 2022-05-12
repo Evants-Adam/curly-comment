@@ -45,21 +45,20 @@ export default {
     handleEditCommentSubmit (data) {
       this.$store.dispatch('editComment', { ...data, id: this.commentToEditId })
         .then((data) => {
-          if (data.message === 'Comment has been edited successfully') {
-            Swal.fire(
-              'Success!',
-              data.message,
-              'success'
-            )
-            this.$router.push({ name: 'CommentPage' })
-            this.$store.commit('SET_COMMENT_TO_EDIT', [])
-          } else {
-            Swal.fire(
-              'Opss..!',
-              data.message,
-              'error'
-            )
-          }
+          Swal.fire(
+            'Success!',
+            'Comment successfully edited!',
+            'success'
+          )
+          this.$router.push({ name: 'CommentPage' })
+          this.$store.commit('SET_COMMENT_TO_EDIT', [])
+        })
+        .catch((error) => {
+          Swal.fire(
+            'Opss..!',
+            error.response.data.message,
+            'error'
+          )
         })
     }
   },

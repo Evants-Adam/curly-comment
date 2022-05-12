@@ -36,23 +36,29 @@ export default {
   methods: {
     newUserRegisterSubmit (newUserCredentials) {
       this.$store.dispatch('registerSubmit', newUserCredentials)
-        .then((data) => {
-          if (data.acknowledged) {
+        .then((response) => {
+          Swal.fire(
+            'Success!',
+            'Register success!',
+            'success'
+          )
+          this.$router.push({ path: 'login' })
+        })
+        .catch((error) => {
+          if (error.code !== 'ERR_NETWORK') {
             Swal.fire(
-              'Success!',
-              'Register success!',
-              'success'
+              'Opss..!',
+              error.response.data.message,
+              'error'
             )
-            this.$router.push({ path: 'login' })
           } else {
             Swal.fire(
-              'Opss...!',
-              data.message,
+              'Opss..!',
+              'Server cannot be reached by now, please try again later!',
               'error'
             )
           }
         })
-        .catch((error) => console.log(error))
     },
     handleSignInClick () {
       this.$router.push({ path: 'login' })

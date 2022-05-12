@@ -67,37 +67,36 @@ export default {
     postComment (data) {
       this.$store.dispatch('postComment', data)
         .then((data) => {
-          if (data.message === 'Message cannot be empty' || data.message === 'Tag is required') {
-            Swal.fire(
-              'Opss..!',
-              data.message,
-              'error'
-            )
-          } else {
-            Swal.fire(
-              'Success!',
-              'Comment successfully posted!',
-              'success'
-            )
-          }
+          Swal.fire(
+            'Success!',
+            'Comment successfully posted!',
+            'success'
+          )
+        })
+        .catch((error) => {
+          Swal.fire(
+            'Opss..!',
+            error.response.data.message,
+            'error'
+          )
         })
     },
     deleteCommentClick (id) {
       this.$store.dispatch('deleteComment', id)
         .then((data) => {
-          if (data.message === 'Forbidden') {
-            Swal.fire(
-              'Opss..!',
-              data.message,
-              'error'
-            )
-          } else {
-            Swal.fire(
-              'Success!',
-              'Comment successfully deleted!',
-              'success'
-            )
-          }
+          this.$store.dispatch('getAllComments')
+          Swal.fire(
+            'Success!',
+            'Comment successfully deleted!',
+            'success'
+          )
+        })
+        .catch((error) => {
+          Swal.fire(
+            'Opss..!',
+            error.response.data.message,
+            'error'
+          )
         })
     },
     editCommentClick (id) {
