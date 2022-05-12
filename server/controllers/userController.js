@@ -38,13 +38,13 @@ class UserController {
   static async loginUser (req, res, next) {
     try {
       const { email, password } = req.body;
-
+      
       // Start of Inputs validation
       if (!email || !password) throw ({ name: 'LoginBadRequest' });
 
       const checkUser = await User.findOneUser(email);
       if (checkUser.length === 0) throw ({ name: 'LoginBadRequest' });
-      
+
       const verifyPassword = comparePassword(password, checkUser[0].password);
       if (!verifyPassword) throw ({ name: 'LoginBadRequest' });
       // End of Inputs validation
