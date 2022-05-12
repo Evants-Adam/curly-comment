@@ -43,8 +43,8 @@ class UserController {
       if (!email || !password) throw ({ name: 'LoginBadRequest' });
 
       const checkUser = await User.findOneUser(email);
-      if (checkUser === 0) throw ({ name: 'LoginBadRequest' });
-
+      if (checkUser.length === 0) throw ({ name: 'LoginBadRequest' });
+      
       const verifyPassword = comparePassword(password, checkUser[0].password);
       if (!verifyPassword) throw ({ name: 'LoginBadRequest' });
       // End of Inputs validation
