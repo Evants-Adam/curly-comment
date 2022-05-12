@@ -33,14 +33,16 @@ const router = new VueRouter({
 })
 
 // Router Guard
-// router.beforeEach((to, from, next) => {
-//   if ((to.name === 'CommentPage' && !localStorage.getItem('access_token'))) {
-//     next({ name: 'LoginPage' })
-//   } else if (to.name !== 'CommentPage' && localStorage.getItem('access_token')) {
-//     next({ name: 'CommentPage' })
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  if ((to.name === 'CommentPage' || to.name === 'EditPage') && !localStorage.getItem('access_token')) {
+    next({ name: 'LoginPage' })
+  } else if ((to.name === 'LoginPage' || to.name === 'RegisterPage') && localStorage.getItem('access_token')) {
+    next({ name: 'CommentPage' })
+  } else if (to.path === '/') {
+    next({ name: 'LoginPage' })
+  } else {
+    next()
+  }
+})
 
 export default router

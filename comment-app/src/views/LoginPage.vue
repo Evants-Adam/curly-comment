@@ -38,22 +38,28 @@ export default {
     signInSubmit (userCredentials) {
       this.$store.dispatch('signInSubmit', userCredentials)
         .then((response) => {
-          if (response.data.access_token) {
-            localStorage.setItem('access_token', response.data.access_token)
-            Swal.fire(
-              'Success!',
-              'Login success!',
-              'success'
-            )
-            this.$router.push({ name: 'CommentPage' })
-          }
+          localStorage.setItem('access_token', response.data.access_token)
+          Swal.fire(
+            'Success!',
+            'Login success!',
+            'success'
+          )
+          this.$router.push({ name: 'CommentPage' })
         })
         .catch((error) => {
-          Swal.fire(
-            'Opss..!',
-            error.response.data.message,
-            'error'
-          )
+          if (error.code !== 'ERR_NETWORK') {
+            Swal.fire(
+              'Opss..!',
+              error.response.data.message,
+              'error'
+            )
+          } else {
+            Swal.fire(
+              'Opss..!',
+              'Server cannot be reached by now, please try again later!',
+              'error'
+            )
+          }
         })
     },
     handleSignUpClick () {

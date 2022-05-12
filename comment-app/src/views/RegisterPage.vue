@@ -45,11 +45,19 @@ export default {
           this.$router.push({ path: 'login' })
         })
         .catch((error) => {
-          Swal.fire(
-            'Opss..!',
-            error.response.data.message,
-            'error'
-          )
+          if (error.code !== 'ERR_NETWORK') {
+            Swal.fire(
+              'Opss..!',
+              error.response.data.message,
+              'error'
+            )
+          } else {
+            Swal.fire(
+              'Opss..!',
+              'Server cannot be reached by now, please try again later!',
+              'error'
+            )
+          }
         })
     },
     handleSignInClick () {
